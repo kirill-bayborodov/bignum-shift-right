@@ -1,9 +1,9 @@
-# Makefile for bignum-shift-left product
+# Makefile for bignum-shift-right product
 
 # --- Configurable Variables ---
 CONFIG ?= debug
 REPORT_NAME ?= current
-LIB_NAME := bignum_shift_left
+LIB_NAME := bignum_shift_right
 NP := $(shell nproc | awk '{print $$1}')
 
 # --- Tools ---
@@ -51,7 +51,7 @@ SINGLE_HEADER = $(DIST_DIR)/$(LIB_NAME).h
 # --- Flags ---
 CFLAGS_BASE = -std=c11 -Wall -Wextra -pedantic -I$(INCLUDE_DIR) -I$(COMMON_INCLUDE_DIR)
 ASFLAGS_BASE = -f elf64
-LDFLAGS = -no-pie -lm
+LDFLAGS = -no-pie -lm -lgmp
 
 ifeq ($(CONFIG), release)
     CFLAGS = $(CFLAGS_BASE) -O2 -march=native
@@ -62,7 +62,7 @@ else
 endif
 
 # --- Perf-specific settings ---
-PERF_SYMBOL_FILTER = '$(LIB_NAME)\.(bit_shift_loop|normalize_loop|set_new_len|epilogue)'
+PERF_SYMBOL_FILTER = '$(LIB_NAME)\.(word_shift|bit_shift_part|bit_shift_loop|bit_shift_last_word|normalize_loop|nonzero_found|zeroed_done|zero_out|error_null_arg|success|exit)'
 PERF_DATA_ST = /tmp/$(LIB_NAME)_$(REPORT_NAME)_st.perf
 PERF_DATA_MT = /tmp/$(LIB_NAME)_$(REPORT_NAME)_mt.perf
 REPORT_FILE_ST = $(REPORTS_DIR)/$(REPORT_NAME)_st.txt
@@ -116,8 +116,8 @@ dist: clean
 # 4. Создаем КОРРЕКТНЫЙ единый заголовочный файл
 	@echo "Generating single-file header..."
 # 4.1. Начинаем с единого include guard
-	@echo "#ifndef BIGNUM_SHIFT_LEFT_SINGLE_H" > $(SINGLE_HEADER)
-	@echo "#define BIGNUM_SHIFT_LEFT_SINGLE_H" >> $(SINGLE_HEADER)
+	@echo "#ifndef bignum_shift_right_SINGLE_H" > $(SINGLE_HEADER)
+	@echo "#define bignum_shift_right_SINGLE_H" >> $(SINGLE_HEADER)
 	@echo "" >> $(SINGLE_HEADER)
 
 # 4.2. Вставляем содержимое bignum.h, но БЕЗ его собственных include guards
@@ -126,24 +126,24 @@ dist: clean
 	@sed '/BIGNUM_H/d' $(COMMON_INCLUDE_DIR)/bignum.h >> $(SINGLE_HEADER)
 	@echo "" >> $(SINGLE_HEADER)
 
-# 4.3. Вставляем содержимое bignum_shift_left.h, но БЕЗ его include guards и БЕЗ #include "bignum.h"
-	@echo "/* --- Included from include/bignum_shift_left.h --- */" >> $(SINGLE_HEADER)
-# sed удаляет строки с BIGNUM_SHIFT_LEFT_H и #include "bignum.h"
-	@sed -e '/BIGNUM_SHIFT_LEFT_H/d' -e '/#include <bignum.h>/d' $(HEADER) >> $(SINGLE_HEADER)
+# 4.3. Вставляем содержимое bignum_shift_right.h, но БЕЗ его include guards и БЕЗ #include "bignum.h"
+	@echo "/* --- Included from include/bignum_shift_right.h --- */" >> $(SINGLE_HEADER)
+# sed удаляет строки с bignum_shift_right_H и #include "bignum.h"
+	@sed -e '/bignum_shift_right_H/d' -e '/#include <bignum.h>/d' $(HEADER) >> $(SINGLE_HEADER)
 	@echo "" >> $(SINGLE_HEADER)
 
 # 4.4. Закрываем единый include guard
-	@echo "#endif // BIGNUM_SHIFT_LEFT_SINGLE_H" >> $(SINGLE_HEADER)
+	@echo "#endif // bignum_shift_right_SINGLE_H" >> $(SINGLE_HEADER)
 
 # 5. Копируем README и LICENSE
 	@cp README.md $(DIST_DIR)/
 	@cp LICENSE $(DIST_DIR)/
 # создаём исходник теста в dist
-	@echo '#include "bignum_shift_left.h"' > dist/test_dist.c; 
+	@echo '#include "bignum_shift_right.h"' > dist/test_dist.c; 
 	@echo '#include <assert.h>' >> dist/test_dist.c; 
 	@echo 'int main() {' >> dist/test_dist.c; 
 	@echo '    bignum_t num = {0};' >> dist/test_dist.c; 
-	@echo '    bignum_shift_left(&num, 5);' >> dist/test_dist.c; 
+	@echo '    bignum_shift_right(&num, 5);' >> dist/test_dist.c; 
 	@echo '    assert(1);' >> dist/test_dist.c; 
 	@echo '    return 0;' >> dist/test_dist.c; 
 	@echo '}' >> dist/test_dist.c
@@ -159,7 +159,7 @@ dist: clean
 
 # --- Compilation Rules ---
 $(OBJ): $(ASM_SRC) 
-	@echo "Builds the main object file 'build/bignum_shift_left.o' (CONFIG=$(CONFIG))..." 
+	@echo "Builds the main object file 'build/bignum_shift_right.o' (CONFIG=$(CONFIG))..." 
 	@$(MKDIR) $(BUILD_DIR)
 	@$(AS) $(ASFLAGS) -o $@ $<
 $(BIN_DIR)/%: $(TESTS_DIR)/%.c $(OBJ) | $(BIN_DIR)
@@ -187,7 +187,7 @@ help:
 	@echo "Usage: make <target> [CONFIG=release] [REPORT_NAME=my_report]"
 	@echo ""
 	@echo "Main Targets:"
-	@echo "  all/build    Builds the main object file 'build/bignum_shift_left.o'."
+	@echo "  all/build    Builds the main object file 'build/bignum_shift_right.o'."
 	@echo "  test         Builds and runs all unit tests from the 'tests/' directory."
 	@echo "  bench        Builds and runs performance benchmarks, generating named reports."
 	@echo "  install      Packages the product into the 'dist/' directory for internal use."

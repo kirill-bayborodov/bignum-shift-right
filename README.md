@@ -1,9 +1,9 @@
-# bignum-shift-left
+# bignum-shift-right
 
-[![C/ASM CI](https://github.com/kirill-bayborodov/bignum-shift-left/actions/workflows/ci.yml/badge.svg )](https://github.com/kirill-bayborodov/bignum-shift-left/actions/workflows/ci.yml )
-[![GitHub release (latest by date)](https://img.shields.io/github/v/release/kirill-bayborodov/bignum-shift-left )](https://github.com/kirill-bayborodov/bignum-shift-left/releases/latest )
+[![C/ASM CI](https://github.com/kirill-bayborodov/bignum-shift-right/actions/workflows/ci.yml/badge.svg )](https://github.com/kirill-bayborodov/bignum-shift-right/actions/workflows/ci.yml )
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/kirill-bayborodov/bignum-shift-right )](https://github.com/kirill-bayborodov/bignum-shift-right/releases/latest )
 
-`bignum-shift-left` is a high-performance, standalone module for performing a logical left shift on an arbitrary-precision integer (`bignum_t`).
+`bignum-shift-right` is a high-performance, standalone module for performing a logical left shift on an arbitrary-precision integer (`bignum_t`).
 A highly optimized x86-64 assembly implementation of a bignum left shift operation, designed for performance-critical applications. 
 
 ## Distribution
@@ -27,14 +27,14 @@ Also available as a standalone distribution.
 
 To clone the repository with its submodule, use:
 ```bash
-git clone --recurse-submodules https://github.com/kirill-bayborodov/bignum-shift-left.git
+git clone --recurse-submodules https://github.com/kirill-bayborodov/bignum-shift-right.git
 ```
 ## API
 
-The library provides a single function, declared in `include/bignum_shift_left.h`.
+The library provides a single function, declared in `include/bignum_shift_right.h`.
 
 ```c
-bignum_status_t bignum_shift_left(bignum_t* num, size_t shift_amount );
+bignum_status_t bignum_shift_right(bignum_t* num, size_t shift_amount );
 ```
 -   **`num`**: A pointer to the `bignum_t` structure to be shifted.
 -   **`shift_amount`**: The number of bits to shift left.
@@ -89,24 +89,24 @@ make clean
 
 ## How to Use
 
-This project produces an object file (`bignum_shift_left.o`) which you can link with your own application.
+This project produces an object file (`bignum_shift_right.o`) which you can link with your own application.
 
 **1. Clone the repository with submodules:**
 ```bash
-git clone --recurse-submodules https://github.com/kirill-bayborodov/bignum-shift-left.git
-cd bignum-shift-left
+git clone --recurse-submodules https://github.com/kirill-bayborodov/bignum-shift-right.git
+cd bignum-shift-right
 ```
 
 **2. Build the object file:**
 ```bash
 make build
 ```
-The output will be located at `build/bignum_shift_left.o`.
+The output will be located at `build/bignum_shift_right.o`.
 
 **3. Link with your application:**
 When compiling your project, include the object file and specify the include paths for the headers.
 ```bash
-gcc your_app.c build/bignum_shift_left.o -I./include -I./libs/common/include -o your_app -no-pie
+gcc your_app.c build/bignum_shift_right.o -I./include -I./libs/common/include -o your_app -no-pie
 ```	
 
 ## Contributing

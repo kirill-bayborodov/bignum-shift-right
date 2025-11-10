@@ -1,12 +1,12 @@
 /**
- * @file    bench_bignum_shift_left.c
- * @brief   Микробенчмарк для профилирования bignum_shift_left.
+ * @file    bench_bignum_shift_right.c
+ * @brief   Микробенчмарк для профилирования bignum_shift_right.
  * @author  git@bayborodov.com
  * @version 1.0.0
- * @date    03.10.2025
+ * @date    10.11.2025
  *
  * @details
- *   Вызывает функцию bignum_shift_left на случайных
+ *   Вызывает функцию bignum_shift_right на случайных
  *   больших числах многократно, чтобы perf успел
  *   собрать достаточное число сэмплов.
  *
@@ -23,14 +23,14 @@
  *
  * # Сборка
  *  gcc -g -O2 -I include -no-pie -fno-omit-frame-pointer \
- *    benchmarks/bench_bignum_shift_left.c build/bignum_shift_left.o \
- *    -o bin/bench_bignum_shift_left
+ *    benchmarks/bench_bignum_shift_right.c build/bignum_shift_right.o \
+ *    -o bin/bench_bignum_shift_right
  *
  * # Запуск perf с записью стека через frame-pointer
- * /usr/local/bin/perf record -F 9999 -o benchmarks/reports/report_bench_bignum_shift_left -g -- bin/bench_bignum_shift_left
+ * /usr/local/bin/perf record -F 9999 -o benchmarks/reports/report_bench_bignum_shift_right -g -- bin/bench_bignum_shift_right
  *
  * # Отчёт, отфильтрованный по символу
- * /usr/local/bin/perf report -i benchmarks/reports/report_bench_bignum_shift_left --stdio --symbol-filter=bignum_shift_left
+ * /usr/local/bin/perf report -i benchmarks/reports/report_bench_bignum_shift_right --stdio --symbol-filter=bignum_shift_right
  */
 
 #include <stdint.h>
@@ -38,7 +38,7 @@
 #include <stdio.h>
 #include <time.h>
 #include <bignum.h>
-#include "bignum_shift_left.h"
+#include "bignum_shift_right.h"
 
 // --- Локальные определения для компиляции ---
 // Эти константы должны быть синхронизированы с ассемблерным кодом.
@@ -95,7 +95,7 @@ int main(void) {
         bignum_t dst = sources[data_idx];
         
         // Вызываем целевую функцию
-        bignum_shift_left(&dst, shifts[data_idx]);
+        bignum_shift_right(&dst, shifts[data_idx]);
         
         // Эта проверка не дает компилятору выбросить вызов функции
         if (dst.len == 0xDEADBEEF) {

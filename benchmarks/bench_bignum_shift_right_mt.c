@@ -1,14 +1,14 @@
 /**
- * @file    bench_bignum_shift_left_mt.c
- * @brief   Многопоточный микробенчмарк для профилирования bignum_shift_left.
+ * @file    bench_bignum_shift_right_mt.c
+ * @brief   Многопоточный микробенчмарк для профилирования bignum_shift_right.
  * @author  git@bayborodov.com
  * @version 1.0.0
- * @date    03.10.2025
+ * @date    10.11.2025
  *
  * @details
  *   Для чистоты измерений все случайные данные генерируются заранее
  *   в основном потоке и передаются в рабочие потоки. Каждый поток
- *   выполняет свой набор вызовов bignum_shift_left, используя
+ *   выполняет свой набор вызовов bignum_shift_right, используя
  *   общий пул предварительно сгенерированных данных.
  *
  * @history
@@ -18,12 +18,12 @@
  *
  * # Сборка
  * gcc -g -O2 -I include -no-pie -fno-omit-frame-pointer -pthread \
- *   benchmarks/bench_bignum_shift_left_mt.c build/bignum_shift_left.o \
- *   -o bin/bench_bignum_shift_left_mt
+ *   benchmarks/bench_bignum_shift_right_mt.c build/bignum_shift_right.o \
+ *   -o bin/bench_bignum_shift_right_mt
  *
  * # Запуск perf
- * /usr/local/bin/perf record -F 9999 -o benchmarks/reports/report_bench_bignum_shift_left_mt -g -- \
- *   bin/bench_bignum_shift_left_mt
+ * /usr/local/bin/perf record -F 9999 -o benchmarks/reports/report_bench_bignum_shift_right_mt -g -- \
+ *   bin/bench_bignum_shift_right_mt
  */
 
 #include <stdio.h>
@@ -32,7 +32,7 @@
 #include <time.h>
 #include <pthread.h>
 #include <bignum.h>
-#include "bignum_shift_left.h"
+#include "bignum_shift_right.h"
 
 // --- Локальные определения для компиляции ---
 #define BIGNUM_CAPACITY 32
@@ -82,7 +82,7 @@ static void* thread_func(void *arg) {
         bignum_t dst = t->sources[data_idx];
         size_t shift = t->shifts[data_idx];
 
-        bignum_shift_left(&dst, shift);
+        bignum_shift_right(&dst, shift);
 
         if (dst.len == 0xDEADBEEF) {
             return (void*)1;
