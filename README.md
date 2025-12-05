@@ -4,8 +4,8 @@
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/kirill-bayborodov/bignum-shift-right?label=release)](https://github.com/kirill-bayborodov/bignum-shift-right/releases/latest)
 
 
-`bignum-shift-right` is a high-performance, standalone module for performing a logical left shift on an arbitrary-precision integer (`bignum_t`).
-A highly optimized x86-64 assembly implementation of a bignum left shift operation, designed for performance-critical applications. 
+`bignum-shift-right` is a high-performance, standalone module for performing a logical right shift on an arbitrary-precision integer (`bignum_t`).
+A highly optimized x86-64 assembly implementation of a bignum right shift operation, designed for performance-critical applications. 
 
 ## Distribution
 
@@ -24,7 +24,7 @@ Also available as a standalone distribution.
 ## Dependencies
 
 -   **Build-time:** `make`, `gcc`, `yasm`, `cppcheck`.
--   **Component:** This project requires `bignum-common` as a git submodule located at `libs/common`.
+-   **Component:** This project requires `bignum-common` as a git submodule located at `libs/bignum-common`.
 
 To clone the repository with its submodule, use:
 ```bash
@@ -35,11 +35,11 @@ git clone --recurse-submodules https://github.com/kirill-bayborodov/bignum-shift
 The library provides a single function, declared in `include/bignum_shift_right.h`.
 
 ```c
-bignum_status_t bignum_shift_right(bignum_t* num, size_t shift_amount );
+bignum_shift_right_status_t bignum_shift_right(bignum_t* restrict num, size_t shift_amount);
 ```
 -   **`num`**: A pointer to the `bignum_t` structure to be shifted.
--   **`shift_amount`**: The number of bits to shift left.
--   **Returns**: A `bignum_status_t` enum (`BIGNUM_SUCCESS`, `BIGNUM_ERROR_NULL_ARG`, `BIGNUM_ERROR_OVERFLOW`).
+-   **`shift_amount`**: The number of bits to shift right.
+-   **Returns**: A `bignum_status_t` enum (`BIGNUM_SHIFT_RIGHT_SUCCESS`, `BIGNUM_SHIFT_RIGHT_ERROR_NULL_ARG`, `BIGNUM_SHIFT_RIGHT_ZEROED`).
 
 ## How to Build, Test, Install and Use
 
