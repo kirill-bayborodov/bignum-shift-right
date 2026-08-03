@@ -106,7 +106,7 @@ SINGLE_HEADER = $(DIST_DIR)/$(LIB_NAME).h
 # --- Flags ---
 CFLAGS_BASE = -std=c11 -Wall -Wextra -pedantic -I$(INCLUDE_DIR) $(addprefix -I , $(SUBMODULES_INCLUDE_DIR))
 ASFLAGS_BASE = -f elf64
-LDFLAGS = -no-pie -lm
+LDFLAGS = -no-pie -lm -lgmp
 
 # Динамически линкуем все вендорные библиотеки (те, что попали в DIST_SUBMODULES)
 # Заменяем дефисы на подчеркивания для имени библиотеки (например, bignum-common -> -lbignum_common)
